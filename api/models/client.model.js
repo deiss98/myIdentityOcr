@@ -4,29 +4,30 @@ const sql = require("../config/db.config.js");
 const Client = function(client) {
   this.nom = client.nom;
   this.email = client.email;
-  this.motDepasse = client.motDePasse;
-  this.telephone = client.telephone;
-  this.role = client.role;
+  this.contact = client.contact;
+  this.mot_de_passe = client.mot_de_passe;
+  this.photo = client.photo;
+  this.date_creation = client.date_creation;
+  this.date_modification = client.date_modification;
 };
-const db = {};
 
-Client.create = (newUser, result) => {
-  sql.query("INSERT INTO clients SET ?", newUser, (err, res) => {
+Client.create = (newClient, result) => {
+  sql.query("INSERT INTO client SET ?", newClient, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    console.log("created client: ", { id: res.insertId, ...newUser });
-    result(null, { id: res.insertId, ...newUser });
+    console.log("created client: ", { id: res.insertId, ...newClient });
+    result(null, { id: res.insertId, ...newClient });
   });
 };
 
 
 
 Client.findById = (userId, result) => {
-  sql.query(`SELECT * FROM clients WHERE id = ?`, [userId], (err, res) => {
+  sql.query(`SELECT * FROM client WHERE id = ?`, [userId], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -45,7 +46,7 @@ Client.findById = (userId, result) => {
 };
 
 Client.findByEmail = (userEmail, result) => {
-  sql.query(`SELECT * FROM clients WHERE email = ?`, [userEmail], (err, res) => {
+  sql.query(`SELECT * FROM client WHERE email = ?`, [userEmail], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -75,11 +76,10 @@ Client.getAll = result => {
     result(null, res);
   });
 };
-
 Client.updateById = (id, client, result) => {
   sql.query(
-    "UPDATE clients SET nom = ?, prenom = ?, email = ?, password = ?, telephone = ?, role = ? WHERE id = ?",
-    [client.nom, client.prenom, client.email, client.password, client.telephone, client.role, id],
+    "UPDATE client SET nom = ?, email = ?, contact = ?, mot_de_passe = ?, photo = ? WHERE id = ?",
+    [client.nom, client.email, client.contact, client.mot_de_passe, client.photo, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -100,7 +100,7 @@ Client.updateById = (id, client, result) => {
 };
 
 Client.remove = (id, result) => {
-  sql.query("DELETE FROM clients WHERE id = ?", id, (err, res) => {
+  sql.query("DELETE FROM client WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -131,8 +131,6 @@ Client.remove = (id, result) => {
 //   });
 // };
 
-db.ROLES = ["client", "admin"];
 module.exports = {
     Client: Client,
-    db: db,
 };

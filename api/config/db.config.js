@@ -3,7 +3,7 @@ var connection = mysql.createConnection({
     host: "127.0.0.1",
     user: "misteradmin",
     password: "carlos97",
-    database: "cap_app",
+    database: "myIdentityOcr",
     socketPath: "/opt/lampp/var/mysql/mysql.sock",
     dateStrings: 'date',
     multipleStatements: true
