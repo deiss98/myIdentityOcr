@@ -29,6 +29,7 @@
 
 //ici les routes 
  require('./routes/auth.routes')(app);
+ require('./routes/cle.routes')(app);
 
  
  // set port, listen for requests

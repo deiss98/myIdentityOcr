@@ -24,7 +24,7 @@ Client.create = (newClient, result) => {
   });
 };
 
-
+//findKey
 
 Client.findById = (userId, result) => {
   sql.query(`SELECT * FROM client WHERE id = ?`, [userId], (err, res) => {

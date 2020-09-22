@@ -1,13 +1,69 @@
-const {User, db} = require("../models/user.model.js");
+const {Client} = require("../models/client.model.js");
 
-const ROLES = db.ROLES;
+verifyToken = (req, res, next) => {
+  let authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(403).send({
+      message: "No Api key provided!"
+    });
+  }
+
+  const apikey = authHeader.split(' ')[1];
+
+  Client.findKey(req.body.email, (err, data) => {
+    if (data) {
+        res.status(400).send({
+          status:false,
+          code:400,
+          message: "Echec! l'email is already in use!"
+        });
+        return;
+    }
+    next();
+  });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: "Unauthorized!"
+      });
+    }
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+const authenticateEnt = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+ // console.log("authHeader :",authHeader);
+  if (authHeader) {
+      const apikey = authHeader.split(' ')[1];
+      connection.connect( function () {
+        connection.query(`SELECT nom_entreprise FROM entreprises WHERE apikey = ?`, [apikey], function(error, entreprise) {
+          if (error) {
+            return res.sendStatus(403);
+          } 
+        //  console.log('entreprise[0] :',entreprise[0]);
+          req.entreprise = entreprise[0];
+          next();
+        });
+      });
+      
+  } else {
+      res.sendStatus(401);
+  }
+};
+
 
 // need to add content-type as application/json
-checkDuplicateEmail = (req, res, next) => {
-    User.findByEmail(req.body.email, (err, data) => {
+checkkeyExist = (req, res, next) => {
+    Client.findByEmail(req.body.email, (err, data) => {
         if (data) {
             res.status(400).send({
-              message: "Failed! Email is already in use!"
+              status:false,
+              code:400,
+              message: "Echec! l'email is already in use!"
             });
             return;
         }
@@ -16,24 +72,9 @@ checkDuplicateEmail = (req, res, next) => {
 };
 
 
-checkRolesExisted = (req, res, next) => {
-    if (req.body.roles) {
-      for (let i = 0; i < req.body.roles.length; i++) {
-        if (!ROLES.includes(req.body.roles[i])) {
-          res.status(400).send({
-            message: "Failed! Role does not exist = " + req.body.roles[i]
-          });
-          return;
-        }
-      }
-    }
-    
-    next();
+  
+  const verifyApiKey = {
+    checkkeyExist: checkkeyExist,
   };
   
-  const verifySignUp = {
-    checkDuplicateEmail: checkDuplicateEmail,
-    checkRolesExisted: checkRolesExisted
-  };
-  
-  module.exports = verifySignUp;
+  module.exports = verifyApiKey;
