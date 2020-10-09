@@ -13,17 +13,17 @@ exports.create = (req, res) => {
       var dataBody = req.body;
 
       var id = hat();
+      console.log(id);
        const cle = new Cle({
-         cle: id,
-         description_cle: req.body.description_cle,
+        kew: id,
+         description_cle: dataBody.description_cle,
          application_id:req.params.appId,
       });
-      console.log(req.body.description_cle);
       Cle.create(cle, (err, data) => {
         if (err)
           res.status(500).send({
             message:
-              err.message || "Some error occurred while creating the Application."
+              err.message || "Some error occurred while generate the key."
           });
          
           else{
@@ -32,40 +32,6 @@ exports.create = (req, res) => {
            })
           }
       });
-
-  // Save Cle in the database
-  // Application_Societe.create(cle, (err, data1) => {
-  //   if (err)
-  //     res.status(500).send({
-  //       message:
-  //         err.message || "Some error occurred while creating the Application."
-  //     });
-  //     else{
-  //     // Create a Cle 
-  //     var id = hat();
-  //     const cle = new Cle({
-  //       cle: id,
-  //       description: dataBody.description,
-  //       application_id:req.abonnement_id ,
-  //     });
-                
-  //       Cle.create(cle, (err, data) => {
-  //         if (err)
-  //           res.status(500).send({
-  //             message:
-  //               err.message || "Some error occurred while creating the Application."
-  //           });
-           
-  //           else{
-              
-  //            res.send({
-  //              application_societe: data1,
-  //              cle: data
-  //            })
-  //           }
-  //       });
-  //     }
-  // });
 };
 
 exports.update = (req, res) => {

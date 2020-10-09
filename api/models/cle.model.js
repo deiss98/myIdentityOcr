@@ -5,8 +5,6 @@ const Cle = function(cle) {
   this.kew = cle.kew;
   this.description_cle = cle.description_cle;
   this.application_id = cle.application_id;
-  this.date_creation = cle.date_creation;
-  this.date_modification = cle.date_modification;
 };
 
 //=====>Start Cle function
@@ -70,9 +68,10 @@ Cle.findById = (id, result) => {
 
 
 Cle.updateById = (id, cle, result) => {
+  var updateTime = Date.now();
   sql.query(
-    "UPDATE cle SET cle = ?, abonnement_id = ?, date_modification = ? WHERE id = ?",
-    [cle.cle,  cle.abonnement_id, cle.date_modification],
+    "UPDATE cle SET  description_cle = ?, date_modification = ? WHERE id = ?",
+    [cle.description_cle, cle.date_modification],
     (err, res) => {
       if (err) {
         console.log("error: ", err);

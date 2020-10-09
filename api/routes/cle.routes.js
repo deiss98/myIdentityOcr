@@ -31,14 +31,13 @@ module.exports = function(cle) {
       authJwt.verifyToken,
     ],
      routesVersioning({
-        "1.0.0": controller.update
+        "1.0.0": controller.revoke
      }, Nomatch)
   );
 
 
 
 };
-
 
 function Nomatch(req, res, next) {
     res.status(401).send({message: "no matching api version"});

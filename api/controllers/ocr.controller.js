@@ -1,14 +1,13 @@
 
 const multer = require('multer');
-//const ejs = require('ejs');
 const path = require('path');
 const fs = require('fs');
- // Tesseract
+// Tesseract
  const { createWorker } = require('tesseract.js');
-// Creation d'un process(thread) et ajout des informations de logs
+//Tesseract Threads
 const worker = createWorker({
     //cacheMethod: 'refresh',
-    logger: m => console.log(m), // Affiche les informations de log
+    logger: m => console.log(m), // log Information
   });
 
 
