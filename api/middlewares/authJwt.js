@@ -17,72 +17,43 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!"
       });
     }
-    req.userId = decoded.id;
+    req.client_id = decoded.id;
+    req.client_role = decoded.role;
     next();
   });
 };
 
-
-
 isAdmin = (req, res, next) => {
 
-    User.findById(req.userId, (err, data) => {
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].role === "admin") {
-              next();
-              return;
-            }
-        }
-        res.status(403).send({
-            message: "Require Admin Role!"
-          });
-          return;
-    });
+  if (req.client_role === "admin") {
+      next();
+      return;
+  }
 
+      res.status(403).send({
+          message: "Require Admin Role!"
+        });
+        return;
 };
 
 isDeveloper = (req, res, next) => {
 
-    User.findById(req.userId, (err, data) => {
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].role === "professeur") {
-              next();
-              return;
-            }
-        }
-        res.status(403).send({
-            message: "Require Professeur Role!"
-          });
-          return;
-    });
+  if (req.client_role === "dev") {
+      next();
+      return;
+  }
   
+   res.status(403).send({
+          message: "Require Developer Role!"
+        });
+        return;
 };
 
-isAdminOrDeveloper = (req, res, next) => {
-    User.findById(req.userId, (err, data) => {
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].role === "professeur") {
-              next();
-              return;
-            }
-
-            if (data[i].role === "etudiant") {
-                next();
-                return;
-              }
-        }
-        res.status(403).send({
-            message: "Require Professeur Or Etudiant Role!"
-          });
-          return;
-    });
-
-};
 
 const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
   isDeveloper: isDeveloper,
-  isAdminOrDeveloper: isAdminOrDeveloper
+  // isAdminOrDeveloper: isAdminOrDeveloper
 };
 module.exports = authJwt;

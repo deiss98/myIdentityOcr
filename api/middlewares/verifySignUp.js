@@ -12,10 +12,9 @@ checkDuplicateEmail = (req, res, next) => {
             return;
         }
         next();
+        
     }); 
 };
-
-
   
   const verifySignUp = {
     checkDuplicateEmail: checkDuplicateEmail,

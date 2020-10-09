@@ -2,14 +2,14 @@ const sql = require("../config/db.config.js");
 
 // constructor
 const Cle = function(cle) {
-  this.cle = cle.nom;
-  this.email = cle.email;
-  this.contact = cle.contact;
-  this.mot_de_passe = cle.mot_de_passe;
-  this.photo = cle.photo;
+  this.kew = cle.kew;
+  this.description_cle = cle.description_cle;
+  this.application_id = cle.application_id;
   this.date_creation = cle.date_creation;
   this.date_modification = cle.date_modification;
 };
+
+//=====>Start Cle function
 
 Cle.create = (newCle, result) => {
   sql.query("INSERT INTO cle SET ?", newCle, (err, res) => {
@@ -26,8 +26,29 @@ Cle.create = (newCle, result) => {
 
 //findKey
 
-Cle.findById = (userId, result) => {
-  sql.query(`SELECT * FROM cle WHERE id = ?`, [userId], (err, res) => {
+Cle.findKey = (kew, result) => {
+  sql.query(`SELECT * FROM cle WHERE kew = ?`, [kew], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+     // console.log("found cle: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found Cle with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+
+
+Cle.findById = (id, result) => {
+  sql.query(`SELECT * FROM cle WHERE id = ?`, [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -45,41 +66,13 @@ Cle.findById = (userId, result) => {
   });
 };
 
-Cle.findByEmail = (userEmail, result) => {
-  sql.query(`SELECT * FROM cle WHERE email = ?`, [userEmail], (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
 
-    if (res.length) {
-      console.log("found cle: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
 
-    // not found Cle with the id
-    result({ kind: "not_found" }, null);
-  });
-};
 
-Cle.getAll = result => {
-  sql.query("SELECT * FROM clients", (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    console.log("clients: ", res);
-    result(null, res);
-  });
-};
 Cle.updateById = (id, cle, result) => {
   sql.query(
-    "UPDATE cle SET nom = ?, email = ?, contact = ?, mot_de_passe = ?, photo = ? WHERE id = ?",
-    [cle.nom, cle.email, cle.contact, cle.mot_de_passe, cle.photo, id],
+    "UPDATE cle SET cle = ?, abonnement_id = ?, date_modification = ? WHERE id = ?",
+    [cle.cle,  cle.abonnement_id, cle.date_modification],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -118,19 +111,22 @@ Cle.remove = (id, result) => {
   });
 };
 
-// Cle.removeAll = result => {
-//   sql.query("DELETE FROM clients", (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
+Cle.removeAll = result => {
+  sql.query("DELETE FROM cle", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
 
-//     console.log(`deleted ${res.affectedRows} clients`);
-//     result(null, res);
-//   });
-// };
+    console.log(`deleted ${res.affectedRows} cles`);
+    result(null, res);
+  });
+};
+
+//=====>End Cle function
+
 
 module.exports = {
     Cle: Cle,
-};
+}

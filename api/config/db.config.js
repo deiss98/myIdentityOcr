@@ -1,8 +1,8 @@
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host: "127.0.0.1",
-    user: "misteradmin",
-    password: "carlos97",
+    user: "root",
+    password: "",
     database: "myIdentityOcr",
     socketPath: "/opt/lampp/var/mysql/mysql.sock",
     dateStrings: 'date',

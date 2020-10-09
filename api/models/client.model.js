@@ -1,3 +1,4 @@
+// Import sql db.config.js 
 const sql = require("../config/db.config.js");
 
 // constructor
@@ -7,8 +8,8 @@ const Client = function(client) {
   this.contact = client.contact;
   this.mot_de_passe = client.mot_de_passe;
   this.photo = client.photo;
-  this.date_creation = client.date_creation;
   this.date_modification = client.date_modification;
+  this.date_creation = client.date_creation;
 };
 
 Client.create = (newClient, result) => {
@@ -25,7 +26,6 @@ Client.create = (newClient, result) => {
 };
 
 //findKey
-
 Client.findById = (userId, result) => {
   sql.query(`SELECT * FROM client WHERE id = ?`, [userId], (err, res) => {
     if (err) {
@@ -64,8 +64,9 @@ Client.findByEmail = (userEmail, result) => {
   });
 };
 
+// Display dev list for only user where role is admin
 Client.getAll = result => {
-  sql.query("SELECT * FROM clients", (err, res) => {
+  sql.query("SELECT * FROM client", (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -76,10 +77,13 @@ Client.getAll = result => {
     result(null, res);
   });
 };
+
+// Updated client by Email
 Client.updateById = (id, client, result) => {
+  console.log(id);
   sql.query(
-    "UPDATE client SET nom = ?, email = ?, contact = ?, mot_de_passe = ?, photo = ? WHERE id = ?",
-    [client.nom, client.email, client.contact, client.mot_de_passe, client.photo, id],
+    "UPDATE client SET nom = ?, email = ?, contact = ?, mot_de_passe = ?, photo = ?,WHERE id = ?",
+    [client.nom, client.email, client.contact, client.mot_de_passe, client.photo,client.date_modification, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -99,6 +103,7 @@ Client.updateById = (id, client, result) => {
   );
 };
 
+// delete client by id only for admin
 Client.remove = (id, result) => {
   sql.query("DELETE FROM client WHERE id = ?", id, (err, res) => {
     if (err) {
@@ -117,19 +122,6 @@ Client.remove = (id, result) => {
     result(null, res);
   });
 };
-
-// Client.removeAll = result => {
-//   sql.query("DELETE FROM clients", (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
-
-//     console.log(`deleted ${res.affectedRows} clients`);
-//     result(null, res);
-//   });
-// };
 
 module.exports = {
     Client: Client,

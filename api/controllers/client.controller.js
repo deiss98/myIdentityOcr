@@ -1,5 +1,8 @@
-// const Client = require("../models/client.model.js");
-const {Client, db} = require("../models/client.model.js");
+const { json } = require("body-parser");
+// Import the model
+const {Client} = require("../models/client.model.js");
+var bcrypt = require("bcryptjs");
+const saltRounds = 10;
 
 // Create and Save a new Client
 exports.create = (req, res) => {
@@ -9,14 +12,16 @@ exports.create = (req, res) => {
       message: "Content can not be empty!"
     });
   }
-  var dataBody = JSON.parse(req.body.data);
+  var dataBody = req.body;
+
   // Create a Client
   const client = new Client({
     nom: dataBody.nom,
-    email: dataBody.nom,
-    motDePasse: dataBody.motDePasse,
-    telephone: dataBody.telephone,
-    role: dataBody.role
+    email: dataBody.email,
+    contact: dataBody.contact,
+    mot_de_passe:  bcrypt.hashSync(dataBody.mot_de_passe, 8),
+    contact: dataBody.contact,
+    photo: dataBody.photo,
   });
 
   // Save Client in the database
@@ -62,12 +67,13 @@ exports.findOne = (req, res) => {
 // Update a Client identified by the clientId in the request
 exports.update = (req, res) => {
   // Validate Request
-  if (!req.body.data) {
+  if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
   }
-  var dataBody = JSON.parse(req.body.data);
+  console.log(req.params.clientId);
+  var dataBody = req.body;
   Client.updateById(
     req.params.clientId,
     new Client(dataBody),
@@ -106,5 +112,12 @@ exports.delete = (req, res) => {
 
 // Delete all clients from the database.
 exports.deleteAll = (req, res) => {
-  
+  Client.removeAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all customers."
+      });
+    else res.send({ message: `All Clients were deleted successfully!` });
+  });
 };

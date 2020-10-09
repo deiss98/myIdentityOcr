@@ -2,18 +2,23 @@
 // "use strict";
  /*jshint sub:true*/
  const express = require("express");
+ // permit to analyse req.body object
  const bodyParser = require("body-parser");
  
+ 
+ // creaye express app
  const app = express();
  
  
  // parse requests of content-type: application/x-www-form-urlencoded
  app.use(bodyParser.urlencoded({ extended: true }));
+
  // parse requests of content-type: application/json
  app.use(bodyParser.json());
+
  // app.set('json spaces', '\t'); //if you want formatted output.
  //app.use(cors(corsOptions));
- app.use(function (req,res,next) {//"http://localhost:8100"
+ app.use(function (req,res,next) {
    res.header("Access-Control-Allow-Origin","*");
    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS");
    res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Authorization, X-XSRF-TOKEN, Accept");
@@ -24,15 +29,20 @@
  
  // simple route
  app.get("/", (req, res) => {
-   res.json({ message: "Welcome to my application." });
+   res.json({ message: "Welcome to apiSolutechWebservice" });
  });
 
-//ici les routes 
- require('./routes/auth.routes')(app);
- require('./routes/cle.routes')(app);
+// process Image
 
+
+//here the routes 
+ require('./routes/client.routes')(app);
+ require('./routes/auth.routes')(app);
+ require('./routes/app.routes')(app);
+ require('./routes/cle.routes')(app);
+ require('./routes/ocr.routes')(app);
  
- // set port, listen for requests
+  // set port, listen for requests
  app.listen(3100, () => {
    console.log("Server is running on port 3100.");
  });
