@@ -1,5 +1,7 @@
 const sql = require("../config/db.config.js");
-
+// Times management
+var moment = require('moment');
+var hat  = require('hat');
 // constructor
 const Cle = function(cle) {
   this.kew = cle.kew;
@@ -66,12 +68,12 @@ Cle.findById = (id, result) => {
 
 
 
-
+// Update by Id
 Cle.updateById = (id, cle, result) => {
-  var updateTime = Date.now();
+  cle.date_modification = moment().format('YYYY-MM-DD HH:MM:SS');
   sql.query(
-    "UPDATE cle SET  description_cle = ?, date_modification = ? WHERE id = ?",
-    [cle.description_cle, cle.date_modification],
+    "UPDATE cle SET description_cle = ?, date_modification = ? WHERE id = ?",
+    [cle.description_cle, cle.date_modification, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -90,6 +92,45 @@ Cle.updateById = (id, cle, result) => {
     }
   );
 };
+
+
+
+// RevokebyId
+Cle.revokebyId = (id, cle, result) => {
+    var cles = hat();
+    var res = sql.query("SELECT kew FROM cle where kew = "+cles);
+    if(res)
+      console.log(res);
+    else
+     console.log("erreur\n");
+      
+  // sql.query(
+  //   "UPDATE cle SET kew = ?, date_modification = ? WHERE id = ?",
+  //   [cle.key, cle.date_modification, id],
+  //   (err, res) => {
+  //     if (err) {
+  //       console.log("error: ", err);
+  //       result(null, err);
+  //       return;
+  //     }
+
+  //     if (res.affectedRows == 0) {
+  //       // not found Cle with the id
+  //       result({ kind: "not_found" }, null);
+  //       return;
+  //     }
+
+  //     console.log("updated cle: ", { id: id, ...cle });
+  //     result(null, { id: id, ...cle });
+  //   }
+  // );
+};
+
+
+
+
+
+
 
 Cle.remove = (id, result) => {
   sql.query("DELETE FROM cle WHERE id = ?", id, (err, res) => {
@@ -123,9 +164,8 @@ Cle.removeAll = result => {
   });
 };
 
+
 //=====>End Cle function
-
-
 module.exports = {
     Cle: Cle,
 }

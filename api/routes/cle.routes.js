@@ -16,7 +16,7 @@ module.exports = function(cle) {
   );
 
   cle.put(
-    "api/cles/:cleId",
+    "/api/cles/:cleId",
     [
       authJwt.verifyToken,
     ],
@@ -26,12 +26,12 @@ module.exports = function(cle) {
   );
 
   cle.put(
-    "api/cles/:cleId/revoke",
+    "/api/cles/:cleId/revoke",
     [
       authJwt.verifyToken,
     ],
      routesVersioning({
-        "1.0.0": controller.revoke
+        "1.0.0": controller.revokebyId
      }, Nomatch)
   );
 
