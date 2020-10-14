@@ -66,7 +66,25 @@ Cle.findById = (id, result) => {
   });
 };
 
+// Display key list for only user where role is admin
+Cle.findByAppId = (id, result) => {
+  sql.query(`SELECT kew FROM cle WHERE id = ?`, [id], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
 
+    if (res.length) {
+      console.log("found cle: ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    // not found Cle with the id
+    result({ kind: "not_found" }, null);
+  });
+};
 
 // Update by Id
 Cle.updateById = (id, cle, result) => {

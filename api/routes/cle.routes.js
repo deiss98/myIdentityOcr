@@ -25,6 +25,25 @@ module.exports = function(cle) {
      }, Nomatch)
   );
 
+  cle.get(
+    "/api/cle/:cleId",
+    [
+      authJwt.verifyToken,
+    ],
+     routesVersioning({
+        "1.0.0": controller.findOne
+     }, Nomatch)
+  );
+
+  cle.get(
+    "/api/cles/:appId",
+    [
+      authJwt.verifyToken,
+    ],
+     routesVersioning({
+        "1.0.0": controller.findOneApp
+     }, Nomatch)
+  );
   cle.put(
     "/api/cles/:cleId/revoke",
     [

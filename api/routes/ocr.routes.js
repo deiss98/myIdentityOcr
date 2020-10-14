@@ -5,7 +5,7 @@ module.exports = function(app) {
   var routesVersioning = require('express-routes-versioning')();
 
   app.post(
-    "/api/ocr/processImage",
+    "/api/ocr/processImages",
     [
       verifyApiKey.checkkeyExist
     ],

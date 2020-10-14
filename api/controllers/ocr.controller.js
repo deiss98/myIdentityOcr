@@ -13,7 +13,7 @@ const worker = createWorker({
 
 // Set The Storage Engine
 const storage = multer.diskStorage({
-    destination: './uploads/',
+    destination: '../uploads/',
     filename: function(req, file, cb){
       cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
@@ -65,7 +65,7 @@ upload(req, res, (err) => {
                 tessedit_char_whitelist: 'abcdefghijklmnopqrstuôêèùçvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/°<.N°No é-à',
                 user_defined_dpi: '300',    
                 });
-                const { data: { text } } = await worker.recognize(`./uploads/${req.file.filename}`);
+                const { data: { text } } = await worker.recognize(`../uploads/${req.file.filename}`);
                 console.log(text);
               var donnee = text.split('\n');
               donnee = donnee.filter(item => item !== '');

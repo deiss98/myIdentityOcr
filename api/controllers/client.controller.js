@@ -99,24 +99,23 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Client with id ${req.params.clientId}.`
+          message: `Not found Client with id ${req.params.customerId}.`
         });
       } else {
         res.status(500).send({
-          message: "Could not delete Client with id " + req.params.clientId
+          message: "Could not delete Client with id " + req.params.customerId
         });
       }
     } else res.send({ message: `Client was deleted successfully!` });
   });
 };
-
 // Delete all clients from the database.
 exports.deleteAll = (req, res) => {
-  Client.removeAll((err, data) => {
+  Customer.removeAll((err, data) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all customers."
+          err.message || "Some error occurred while removing all client."
       });
     else res.send({ message: `All Clients were deleted successfully!` });
   });

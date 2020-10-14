@@ -53,6 +53,78 @@ exports.create = (req, res) => {
             }
         });
 };
+exports.findOne = (req, res) => {
+    Client.findById(req.params.clientId, (err, data) => {
+        if (err) {
+          if (err.kind === "not_found") {
+            res.status(404).send({
+              message: `Not found Client with id ${req.params.clientId}.`
+            });
+          } else {
+            res.status(500).send({
+              message: "Error retrieving Client with id " + req.params.clientId
+            });
+          }
+        } else res.send(data);
+      });
+};
+// Update a Client identified by the clientId in the request
+exports.update = (req, res) => {
+  // Validate Request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+  console.log(req.params.appId);
+  var dataBody = req.body;
+  Application.updateById(
+    req.params.appId,
+    new Application(dataBody),
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Client with id ${req.params.appId}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error updating Client with id " + req.params.appId
+          });
+        }
+      } else res.send(data);
+    }
+  );
+};
+
+// Find an app by Id
+exports.findOne = (req, res) => {
+  Application.findById(req.params.appId, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Client with id ${req.params.appId}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving Client with id " + req.params.appId
+          });
+        }
+      } else res.send(data);
+    });
+};
+
+// Find all app
+exports.findAll = (req, res) => {
+  Application.getAll((err, data) => {
+      if (err)
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving clients."
+        });
+      else res.send(data);
+  });
+};
 
 // exports.signin = (req, res) => {
 //   var dataBody = req.body;

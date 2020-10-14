@@ -1,5 +1,6 @@
 // Import sql db.config.js 
 const sql = require("../config/db.config.js");
+var moment = require('moment');
 
 // constructor
 const Client = function(client) {
@@ -81,8 +82,9 @@ Client.getAll = result => {
 // Updated client by Email
 Client.updateById = (id, client, result) => {
   console.log(id);
+  client.date_modification = moment().format('YYYY-MM-DD HH:MM:SS');
   sql.query(
-    "UPDATE client SET nom = ?, email = ?, contact = ?, mot_de_passe = ?, photo = ?,WHERE id = ?",
+    "UPDATE client SET nom = ?, email = ?, contact = ?, mot_de_passe = ?, photo = ?, date_modification = ? WHERE id = ?",
     [client.nom, client.email, client.contact, client.mot_de_passe, client.photo,client.date_modification, id],
     (err, res) => {
       if (err) {
@@ -103,7 +105,6 @@ Client.updateById = (id, client, result) => {
   );
 };
 
-// delete client by id only for admin
 Client.remove = (id, result) => {
   sql.query("DELETE FROM client WHERE id = ?", id, (err, res) => {
     if (err) {
@@ -113,7 +114,7 @@ Client.remove = (id, result) => {
     }
 
     if (res.affectedRows == 0) {
-      // not found Client with the id
+      // not found Customer with the id
       result({ kind: "not_found" }, null);
       return;
     }
@@ -122,6 +123,23 @@ Client.remove = (id, result) => {
     result(null, res);
   });
 };
+
+
+
+Client.removeAll = result => {
+  sql.query("DELETE FROM client", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log(`deleted ${res.affectedRows} customers`);
+    result(null, res);
+  });
+};
+
+
 
 module.exports = {
     Client: Client,

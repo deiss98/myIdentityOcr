@@ -34,6 +34,43 @@ exports.create = (req, res) => {
       });
 };
 
+
+// Find a single Client with a clientId
+exports.findOne = (req, res) => {
+  Cle.findById(req.params.cleId, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Client with id ${req.params.cleId}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving Client with id " + req.params.cleId
+          });
+        }
+      } else res.send(data);
+    });
+};
+
+// Find a single Client with a clientId
+exports.findOneApp = (req, res) => {
+  Cle.findByAppId(req.params.appId, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Client with id ${req.params.appId}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving Client with id " + req.params.appId
+          });
+        }
+      } else res.send(data);
+    });
+};
+
+
+
 // Update an key
 exports.update = (req, res) => {
     // Validate Request

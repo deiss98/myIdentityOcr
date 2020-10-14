@@ -1,4 +1,5 @@
 const sql = require("../config/db.config.js");
+var moment = require('moment');
 
 //constructor
 // constructor for application
@@ -60,8 +61,9 @@ Application.getAll = result => {
 
 
 Application.updateById = (id, application, result) => {
+  application.date_modification = moment().format('YYYY-MM-DD HH:MM:SS');
   sql.query(
-    "UPDATE application SET nom_application = ?, desciption = ?, date_modification = ?, WHERE id = ?",
+    "UPDATE application SET nom_application = ?, description = ?, date_modification = ? WHERE id = ?",
     [application.nom_application, application.description, application.date_modification, id],
     (err, res) => {
       if (err) {
